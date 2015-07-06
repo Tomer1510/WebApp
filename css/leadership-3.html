@@ -1,0 +1,176 @@
+<?php
+/*
+ *Template Name:  Leadership 	
+ */
+?>
+<?php get_header(); ?>
+<?php $image_id = get_post_thumbnail_id(); ?>
+<?php if($image_id !="") { ?>
+	<?php $image_attributes = wp_get_attachment_image_src( $image_id, 'full');  ?>
+	<div class="titleimagewrapper" style="background-image:url(<?php echo $image_attributes[0]; ?>);" >
+		<h2><?php the_title();?></h2><h1><?php  echo get_field('sub_title');?></h1>
+	</div>
+<?php } ?>	
+<div class="page_wraper">
+	<div class="container maincontentwrapper Leadershipcontent">		
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="desktopscreencontentwrapper   ">	
+				
+					<div class="leadershipitemswrapper clearfix" >
+
+						<?php
+						
+						$postslist = get_posts('numberposts=-1&order=asc&orderby=date&post_type=leadership');	
+						$postslistCount = count($postslist);
+						wp_reset_query(); 
+						wp_reset_postdata();
+		
+						for($i=0;$i<$postslistCount/3;$i++)
+						{
+							$j=0;
+							$firstContent = "";
+							$firstTitle = "";							
+							$firstPosition = "";	
+							$firstLinkT = "";							
+							$firstLinkP = "";							
+							$firstLinkF = "";							
+							$secondContent = "";
+							$secondTitle = "";							
+							$secondPosition = "";	
+							$secondLinkT = "";							
+							$secondLinkP = "";							
+							$secondLinkF = "";								
+							$thirdContent = "";		
+							$thirdTitle = "";							
+							$thirdPosition = "";	
+							$thirdLinkT = "";							
+							$thirdLinkP = "";							
+							$thirdLinkF = "";			
+							
+							echo "<div class='leadership_row col-xs-12'>";
+							
+								$postslist = get_posts('numberposts=3&offset='.(($i)*3).'&order=asc&orderby=date&post_type=leadership');
+								foreach ($postslist as $post) :
+								setup_postdata($post);	
+
+								if($j==0)
+								{
+									$firstContent = get_the_content();
+								 	$firstTitle = get_the_title();							
+									$firstPosition = get_field('position');	
+									$firstLinkT = get_field('twitter_link') ;							
+									$firstLinkP = get_field('pinterest_link') ;							
+									$firstLinkF = get_field('facebook_link') ;	
+								}
+								if($j==1)
+								{
+									$secondContent = get_the_content();								
+									$secondTitle = get_the_title();							
+									$secondPosition = get_field('position');	
+									$secondLinkT = get_field('twitter_link') ;							
+									$secondLinkP = get_field('pinterest_link') ;							
+									$secondLinkF = get_field('facebook_link') ;									
+								}
+								if($j==2)
+								{
+									$thirdContent = get_the_content();		
+									$thirdTitle = get_the_title();							
+									$thirdPosition = get_field('position');	
+									$thirdLinkT = get_field('twitter_link') ;							
+									$thirdLinkP = get_field('pinterest_link') ;							
+									$thirdLinkF = get_field('facebook_link') ;									
+								}								 
+								echo "<div class='leadership_post col-xs-4 leadership_post".$j." ".(($j==0 && $i==0)?"currentleadership_post":" ")." '>";
+									echo "<div style='background-image:url(".get_field('image').");' ></div>";
+									echo "<h2  >".get_the_title()."</h2>";
+									echo "<h6 >".get_field('position')."</h6>";
+								echo "</div>";		
+								
+								$j++;
+								
+								endforeach; 	
+								wp_reset_query(); 
+								wp_reset_postdata();	
+								
+							echo "</div>";
+							
+							echo "<div class='leadershipcontentwrapper  col-xs-12 ".($i==0?"visibleleadershipcontent":"hiddenleadershipcontent")." '  >";
+								echo "<div class='leadership_ind leadership_ind0 current_ind col-xs-4'></div>";
+								echo "<div class='leadership_ind leadership_ind1 col-xs-4'></div>";
+								echo "<div class='leadership_ind leadership_ind2 col-xs-4'></div>";
+								
+								if($firstContent!="")
+								{
+									echo "<div class='leadershipcontent0 leadershipcontent' >";
+										echo "<div class='leadershiptopcontent' >";
+											echo "<div class='leadershiptopcontent_title' >".$firstTitle."</div>";
+											echo "<div class='leadershiptopcontent_position' >".$firstPosition."</div>";
+											echo "<div class='leadershiptopcontent_sswrapper' >";
+												if($firstLinkF!="")												
+												echo "<a class='leadershiptopcontent_ss_F' href='mailto:".$firstLinkF."'  ></a>";
+												if($firstLinkP!="")
+												echo "<a class='leadershiptopcontent_ss_P' href='".$firstLinkP."' target='_blank' ></a>";												
+												if($firstLinkT!="")
+												echo "<a class='leadershiptopcontent_ss_T' href='".$firstLinkT."' target='_blank' ></a>";
+											echo "</div>";
+										echo "</div>";
+										echo "<div class='leadershipbottomcontent' >".$firstContent."</div>";
+									echo "</div>";
+								}
+								if($secondContent!="")
+								{
+									echo "<div class='leadershipcontent1 leadershipcontent' >";
+										echo "<div class='leadershiptopcontent' >";
+											echo "<div class='leadershiptopcontent_title' >".$secondTitle."</div>";
+											echo "<div class='leadershiptopcontent_position' >".$secondPosition."</div>";
+											echo "<div class='leadershiptopcontent_sswrapper' >";
+												if($secondtLinkF!="")												
+												echo "<a class='leadershiptopcontent_ss_F' href='mailto:".$secondLinkF."' ></a>";
+												if($secondLinkP!="")
+												echo "<a class='leadershiptopcontent_ss_P' href='".$secondLinkP."' target='_blank' ></a>";												
+												if($secondLinkT!="")
+												echo "<a class='leadershiptopcontent_ss_T' href='".$secondLinkT."' target='_blank' ></a>";
+											echo "</div>";
+										echo "</div>";
+										echo "<div class='leadershipbottomcontent' >".$secondContent."</div>";
+									echo "</div>";
+								}
+								if($thirdContent!="")
+								{
+									echo "<div class='leadershipcontent2 leadershipcontent' >";
+										echo "<div class='leadershiptopcontent' >";
+											echo "<div class='leadershiptopcontent_title' >".$thirdTitle."</div>";
+											echo "<div class='leadershiptopcontent_position' >".$thirdPosition."</div>";
+											echo "<div class='leadershiptopcontent_sswrapper' >";
+												if($thirdLinkF!="")												
+												echo "<a class='leadershiptopcontent_ss_F' href='mailto:".$thirdLinkF."'   ></a>";
+												if($thirdLinkP!="")
+												echo "<a class='leadershiptopcontent_ss_P' href='".$thirdLinkP."' target='_blank' ></a>";												
+												if($thirdLinkT!="")
+												echo "<a class='leadershiptopcontent_ss_T' href='".$thirdLinkT."' target='_blank' ></a>";
+											echo "</div>";
+										echo "</div>";
+										echo "<div class='leadershipbottomcontent' >".$thirdContent."</div>";
+									echo "</div>";
+								}
+							echo "</div>";
+						}
+
+						wp_reset_query(); 
+						wp_reset_postdata();
+						?>
+
+					</div>
+					<div class="bottomcareercontent" > 
+					<?php if ( have_posts() ) while ( have_posts() ) : the_post(); ?>
+						<?php the_content(); ?>
+					<?php endwhile; ?>	
+					</div>
+				</div>		
+			</div>
+		</div>
+		
+	</div>
+</div>
+<?php get_footer(); ?>
