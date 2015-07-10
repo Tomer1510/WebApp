@@ -179,15 +179,15 @@ footer {
 }
 
 .top-options > .option[data-option="platform"] {
-	background-image: url('/img/icons/action-report-new.png');
+	background-image: url('../img/icons/action-report-new.png');
 }
 
 .top-options > .option[data-option="dashboard"] {
-	background-image: url('/img/icons/action-report-top.png');
+	background-image: url('../img/icons/action-report-top.png');
 }
 
 .top-options > .option[data-option="tutorials"] {
-	background-image: url('/img/icons/actions-help.png');
+	background-image: url('../img/icons/actions-help.png');
 }
 
 
