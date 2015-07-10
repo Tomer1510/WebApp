@@ -15,7 +15,7 @@ angular.module('WebApp').directive('reportViewer', ["$http", "$compile", "$timeo
 
 
             $scope.save = function() {
-                localStorage.setItem($scope.viewerId, JSON.stringify({
+                localStorage.setItem($scope.viewerId, angular.toJson({
                     reports: $scope.reports,
                     selectedReport: $scope.selectedReport
                 }));
@@ -29,6 +29,9 @@ angular.module('WebApp').directive('reportViewer', ["$http", "$compile", "$timeo
             $scope.load = function() {
                 var savedData = localStorage.getItem($scope.viewerId);
                 if (!savedData) {
+                    $scope.reports.push({name: 'ynet', url: 'http://ynet.co.il'});
+                    $scope.reports.push({name: 'forter', url: 'http://forter.com'});
+                    $scope.$apply();
                     return;
                 }
                 try {
@@ -40,6 +43,7 @@ angular.module('WebApp').directive('reportViewer', ["$http", "$compile", "$timeo
 
                 $scope.reports = savedData.reports||[];
                 $scope.selectedReport = savedData.selectedReport||0;
+                
             }
 
             $scope.closeWizard = function() {
