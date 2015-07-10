@@ -5,8 +5,25 @@
     </div>
     <div class="right">
         <ul class="tab-menu-options">
-            <li><i class="fa fa-external-link-square"></i></li>
-            <li><i class="fa fa-cog"></i></li>
+            <li class="option-link"><a target="_blank" ng-href="{{reports[selectedReport].url}}"><i class="fa fa-external-link-square"></i></a></li>
+            <li class="option-wizard">
+                <i class="fa fa-cog" ng-click="toggleWizard($event)"></i>
+                <div class="report-wizard" ng-click="preventWizardClose($event)">
+                    <table class="edit-report">
+                        <tbody>
+                            <tr ng-repeat="(i, report) in reports">
+                                <td>Report {{i}}</td>
+
+                                <td>Name</td>
+                                <td><input type="text" ng-model="report.name"></td>
+
+                                <td>URL</td>
+                                <td><input type="text" ng-model="report.url"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </li>
         </ul>
 
     </div>

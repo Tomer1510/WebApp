@@ -26,6 +26,8 @@ header {
 	display: block;
 	width: 100%;
 	height: 40px;
+	position: relative;
+
 }
 
 .tab-top-menu .left {
@@ -106,14 +108,18 @@ footer {
 }
 
 #tabs > ul > li {
-	margin: 1px 1.5em 0 0;
-	width: 20%;
+	margin: 0 0;
+	width: 22%;
 	text-align: center;
-	padding: 5px 5px;
+	padding: 0.5% 0.5%;
 	border: 1px #777777 solid;
 	border-bottom: none;
 	outline: none;
 
+}
+
+#tabs > ul > li+li {
+	margin-left: 4%;
 }
 
 #tabs > ul > li.ui-state-default {
@@ -159,7 +165,7 @@ footer {
 
 .top-options > .option {
 	display: inline-block;
-	height: 150px;
+	height: 180px;
 	width: 30%;
 	margin-left: 4.5%;
 	background-repeat: no-repeat;
@@ -215,6 +221,15 @@ footer {
 	cursor: pointer;
 }
 
+.tab-top-menu .right .tab-menu-options > li.option-wizard {
+	display: inline-block;
+	padding: 5px 10px 10px 10px;
+}
+
+.tab-top-menu .right .tab-menu-options > li.option-wizard.active {
+	background: white;
+}
+
 .tab-top-menu .right .tab-menu-options {
 	list-style-type: none;
 	display: inline;
@@ -236,3 +251,47 @@ footer {
 #tabs {
 	height: 100%;
 }
+
+* {
+	box-sizing: border-box;
+}
+
+.report-wizard {
+	position: absolute;
+	top:40px;
+	left:0;
+	width:100%;
+	padding: 5px 10px 30px 10px;
+	background: white;
+	cursor: default;
+	display: none;
+	-webkit-box-shadow: 9px 9px 11px -7px rgba(0,0,0,0.75);
+	-moz-box-shadow: 9px 9px 11px -7px rgba(0,0,0,0.75);
+	box-shadow: 9px 9px 11px -7px rgba(0,0,0,0.75);
+}
+
+
+.report-wizard .edit-report {
+	border-collapse: separate;
+	border-spacing: 0 5px;
+	font-size: 13px;
+	width: 100%;
+	margin: auto;
+}
+
+.report-wizard .edit-report tr {
+	width: 100%;
+	background: #dcdada;
+}
+
+.report-wizard .edit-report tr td {
+
+	background: #dcdada;
+}
+
+
+.report-wizard .edit-report tr > td:first-child {
+
+	padding: 5px 10px;
+}
+

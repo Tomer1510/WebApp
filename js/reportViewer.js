@@ -11,7 +11,7 @@ angular.module('WebApp').directive('reportViewer', ["$http", "$compile", "$timeo
             $scope.autoSaver = undefined;
             $scope.element = element;
             $scope.reportFrame = element.find("iframe")[0];
-            
+            $scope.showWizard = false;
 
 
             $scope.save = function() {
@@ -42,6 +42,18 @@ angular.module('WebApp').directive('reportViewer', ["$http", "$compile", "$timeo
                 $scope.selectedReport = savedData.selectedReport||0;
             }
 
+            $scope.closeWizard = function() {
+                $scope.element.find('li.option-wizard').removeClass('active');
+                $scope.element.find('li.option-wizard .report-wizard').hide();
+            }
+
+            $scope.toggleWizard = function (ev) {
+                ev.stopPropagation();
+                $scope.element.find('li.option-wizard').toggleClass('active');
+                $scope.element.find('li.option-wizard .report-wizard').toggle();
+
+            }
+
             $scope.init = function() {
 
                 if ($scope.$parent.debugMode) {
@@ -50,7 +62,14 @@ angular.module('WebApp').directive('reportViewer', ["$http", "$compile", "$timeo
                 }
                 $scope.load();
                 $timeout($scope.autoSave, 3000);
+                $scope.element.click(function(){
+                   $scope.closeWizard();
+                });
+            }
 
+            $scope.preventWizardClose = function(ev) {
+                console.log(1);
+                ev.stopPropagation();
             }
 
             $scope.$on('$destroy', function(e) {
