@@ -1,0 +1,19 @@
+<div class="tab-top-menu">
+    <div class="left">
+        <select class="select-site" ng-model="selectedReport" ng-options="i*1 as (t.name) for (i,t) in reports">
+        </select>
+    </div>
+    <div class="right">
+        <ul class="tab-menu-options">
+            <li><i class="fa fa-external-link-square"></i></li>
+            <li><i class="fa fa-cog"></i></li>
+        </ul>
+
+    </div>
+
+</div>
+
+
+<div class="report-content" ng-show="reports.length > 0">
+    <iframe id="{{viewerId}}-report" ng-src="{{reports[selectedReport].url}}"></iframe>
+</div>
