@@ -4,7 +4,7 @@
 var app = angular.module("WebApp", []);
 angular.module('WebApp').controller('WebAppController', function($scope, $http, $compile, $timeout) {
 
-    $scope.debugMode = true;
+    $scope.debugMode = false;
     $scope.config = {};
     $scope.configUpdater = undefined;
 

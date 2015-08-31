@@ -1,7 +1,9 @@
-angular.module('WebApp').directive('reportViewer', ["$http", "$compile", "$timeout", "$localStorage", function($http, $compile, $timeout, $localStorage) {
+angular.module('WebApp').directive('reportViewer', ["$http", "$compile", "$timeout", "$localStorage", "$sce", function($http, $compile, $timeout, $localStorage, $sce) {
     return {
         scope: {
-            viewerId: "@"
+            viewerId: "@",
+            simpleMode: "@",
+            simpleUrl: "@"
         },
         templateUrl: 'partials/reportViewer.html',
         link: function($scope, element) {
@@ -12,51 +14,95 @@ angular.module('WebApp').directive('reportViewer', ["$http", "$compile", "$timeo
             $scope.element = element;
             $scope.reportFrame = element.find("iframe")[0];
             $scope.showWizard = false;
+            $scope.newReport = {
+                name: "",
+                url: ""
+            };
 
+            $scope.validateRow = function(i) {
+                var report = $scope.reports[i];
+                return report.name && report.name.length > 0 && report.url && report.url.toString().length > 0
+                    && angular.element("#"+$scope.viewerId+"-report-"+i+" .url").hasClass('ng-valid');
+            };
+
+            $scope.appendNewReport = function(whoCalledMe) {
+                if ($scope.newReport.name.length > 0 && $scope.newReport.url.length > 0) {
+                    $scope.reports.push({
+                        name: $scope.newReport.name,
+                        url: $sce.trustAsResourceUrl($scope.newReport.url)
+                    });
+                    $scope.newReport = {
+                        name: "",
+                        url: ""
+                    };
+                    angular.element("#" + ($scope.viewerId) + "-report-" + ($scope.reports.length - 1) + " > ." + whoCalledMe).focus();
+                }
+            };
+
+
+            $scope.deleteReport = function(i) {
+                if (confirm('Are you sure you want to delete this report?')) {
+                    $scope.reports.splice(i, 1);
+                }
+            };
 
             $scope.save = function() {
+                var reports = [];
+                $scope.reports.filter(function(report, i){
+                    return $scope.validateRow(i);
+                })
+                    .forEach(function(report){
+                       reports.push({
+                           name: report.name,
+                           url: report.url.toString()
+                       });
+                    });
                 localStorage.setItem($scope.viewerId, angular.toJson({
-                    reports: $scope.reports,
+                    reports: reports,
                     selectedReport: $scope.selectedReport
                 }));
-            }
+            };
 
             $scope.autoSave = function() {
                 $scope.save();
                 $scope.autoSaver = $timeout($scope.autoSave, 3000);
-            }
+            };
 
             $scope.load = function() {
                 var savedData = localStorage.getItem($scope.viewerId);
                 if (!savedData) {
-                    $scope.reports.push({name: 'ynet', url: 'http://ynet.co.il'});
-                    $scope.reports.push({name: 'forter', url: 'http://forter.com'});
+                    $scope.reports.push({name: 'ynet', url: $sce.trustAsResourceUrl('http://ynet.co.il')});
+                    $scope.reports.push({name: 'forter', url: $sce.trustAsResourceUrl('http://forter.com')});
                     $scope.$apply();
                     return;
                 }
                 try {
                     savedData = JSON.parse(savedData);
+                    savedData.reports.forEach(function(data){
+                       data.url = $sce.trustAsResourceUrl(data.url);
+                    });
                 }
                 catch(e) {
+                    console.log(e);
                     savedData = {};
                 }
 
                 $scope.reports = savedData.reports||[];
                 $scope.selectedReport = savedData.selectedReport||0;
                 
-            }
+            };
 
             $scope.closeWizard = function() {
                 $scope.element.find('li.option-wizard').removeClass('active');
                 $scope.element.find('li.option-wizard .report-wizard').hide();
-            }
+            };
 
             $scope.toggleWizard = function (ev) {
                 ev.stopPropagation();
                 $scope.element.find('li.option-wizard').toggleClass('active');
                 $scope.element.find('li.option-wizard .report-wizard').toggle();
 
-            }
+            };
 
             $scope.init = function() {
 
@@ -64,17 +110,26 @@ angular.module('WebApp').directive('reportViewer', ["$http", "$compile", "$timeo
                     window.$directive = $scope;
                     window.$localStorage = $localStorage;
                 }
-                $scope.load();
-                $timeout($scope.autoSave, 3000);
-                $scope.element.click(function(){
-                   $scope.closeWizard();
-                });
-            }
+                if (!!$scope.simpleMode && $scope.simpleUrl) {
+                    $scope.reports = [
+                        {
+                            name: 'default',
+                            url: $sce.trustAsResourceUrl($scope.simpleUrl)
+                        }
+                    ]
+                }
+                else {
+                    $scope.load();
+                    $timeout($scope.autoSave, 3000);
+                    $scope.element.click(function () {
+                        $scope.closeWizard();
+                    });
+                }
+            };
 
             $scope.preventWizardClose = function(ev) {
-                console.log(1);
                 ev.stopPropagation();
-            }
+            };
 
             $scope.$on('$destroy', function(e) {
                 if (!!$scope.autoSaver) {
@@ -87,7 +142,7 @@ angular.module('WebApp').directive('reportViewer', ["$http", "$compile", "$timeo
                     name: name,
                     url: url
                 });
-            }
+            };
 
             $timeout($scope.init, 0);
         }
