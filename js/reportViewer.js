@@ -40,6 +40,7 @@ angular.module('WebApp').directive('reportViewer', ["$http", "$compile", "$timeo
 
                     $timeout(function(){
                         angular.element("#" + ($scope.viewerId) + "-report-" + ($scope.reports.length - 1) + " ." + whoCalledMe).focus();
+                        $scope.newReport.url = ""; // race condition bug
                     });
                 }
             };
