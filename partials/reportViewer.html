@@ -1,11 +1,11 @@
 <div class="tab-top-menu">
     <div class="left">
-        <select ng-if="!simpleMode" class="select-site" ng-model="selectedReport" ng-options="i*1 as (t.name) for (i,t) in reports">
+        <select ng-if="!simpleMode" class="select-site" ng-model="selectedReport.id" ng-options="i*1 as (t.name) for (i,t) in reports">
         </select>
     </div>
     <div class="right">
         <ul class="tab-menu-options">
-            <li class="option-link"><a target="_blank" ng-href="{{reports[selectedReport].url}}"><i class="fa fa-external-link-square"></i></a></li>
+            <li class="option-link"><a target="_blank" ng-href="{{reports[selectedReport.id].url}}"><i class="fa fa-external-link-square"></i></a></li>
             <li class="option-wizard" ng-if="!simpleMode">
                 <i class="fa fa-cog" ng-click="toggleWizard($event)"></i>
                 <div class="report-wizard" ng-click="preventWizardClose($event)">
@@ -18,7 +18,7 @@
                                 <td><input class="name" type="text" ng-model="report.name"></td>
 
                                 <td>URL</td>
-                                <td><input class="url" type="url" ng-model="report.url"></td>
+                                <td><input class="url" type="url" ng-model="report.url" ng-change="trustMe(this)"></td>
 
                                 <td><i class="fa fa-times delete-site" ng-click="deleteReport(i)"></i></td>
                             </tr>
@@ -28,7 +28,7 @@
                                 <td>Report {{reports.length+1}}</td>
 
                                 <td>Name</td>
-                                <td><input type="text" ng-model="newReport.name" ng-keydown="appendNewReport('url')"></td>
+                                <td><input type="text" ng-model="newReport.name" ng-keydown="appendNewReport('name')"></td>
 
                                 <td>URL</td>
                                 <td><input type="url"  ng-model="newReport.url" ng-keydown="appendNewReport('url')"></td>
@@ -47,5 +47,5 @@
 
 
 <div class="report-content" ng-if="reports.length > 0">
-    <iframe id="{{viewerId}}-report" ng-src="{{reports[selectedReport].url}}"></iframe>
+    <iframe id="{{viewerId}}-report" ng-src="{{reports[selectedReport.id].url}}"></iframe>
 </div>

@@ -9,7 +9,9 @@ angular.module('WebApp').directive('reportViewer', ["$http", "$compile", "$timeo
         link: function($scope, element) {
 
             $scope.reports = [];
-            $scope.selectedReport = 0;
+            $scope.selectedReport = {
+                id: 0
+            };
             $scope.autoSaver = undefined;
             $scope.element = element;
             $scope.reportFrame = element.find("iframe")[0];
@@ -26,7 +28,7 @@ angular.module('WebApp').directive('reportViewer', ["$http", "$compile", "$timeo
             };
 
             $scope.appendNewReport = function(whoCalledMe) {
-                if ($scope.newReport.name.length > 0 && $scope.newReport.url.length > 0) {
+                if ($scope.newReport.name.length > 0 && $scope.newReport.url && $scope.newReport.url.length > 0) {
                     $scope.reports.push({
                         name: $scope.newReport.name,
                         url: $sce.trustAsResourceUrl($scope.newReport.url)
@@ -35,7 +37,10 @@ angular.module('WebApp').directive('reportViewer', ["$http", "$compile", "$timeo
                         name: "",
                         url: ""
                     };
-                    angular.element("#" + ($scope.viewerId) + "-report-" + ($scope.reports.length - 1) + " > ." + whoCalledMe).focus();
+
+                    $timeout(function(){
+                        angular.element("#" + ($scope.viewerId) + "-report-" + ($scope.reports.length - 1) + " ." + whoCalledMe).focus();
+                    });
                 }
             };
 
@@ -59,13 +64,17 @@ angular.module('WebApp').directive('reportViewer', ["$http", "$compile", "$timeo
                     });
                 localStorage.setItem($scope.viewerId, angular.toJson({
                     reports: reports,
-                    selectedReport: $scope.selectedReport
+                    selectedReport: $scope.selectedReport.id
                 }));
             };
 
             $scope.autoSave = function() {
                 $scope.save();
                 $scope.autoSaver = $timeout($scope.autoSave, 3000);
+            };
+
+            $scope.trustMe = function(input){
+                input.report.url =  $sce.trustAsResourceUrl( input.report.url);
             };
 
             $scope.load = function() {
@@ -83,12 +92,12 @@ angular.module('WebApp').directive('reportViewer', ["$http", "$compile", "$timeo
                     });
                 }
                 catch(e) {
-                    console.log(e);
+                    //console.log(e);
                     savedData = {};
                 }
 
                 $scope.reports = savedData.reports||[];
-                $scope.selectedReport = savedData.selectedReport||0;
+                $scope.selectedReport.id = savedData.selectedReport||0;
                 
             };
 
